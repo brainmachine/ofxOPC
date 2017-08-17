@@ -477,3 +477,8 @@ void ofxOPC::disconnect()
     client.close();
     cleanup();
 }
+//--------------------------------------------------------------
+void ofxOPC::sendFirmwareConfigPacket() {
+    string b = "000000001111111100000000000001010000000000000001000000000000001000000010";
+    client.sendRaw(b);
+}
