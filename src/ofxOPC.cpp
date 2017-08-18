@@ -479,6 +479,19 @@ void ofxOPC::disconnect()
 }
 //--------------------------------------------------------------
 void ofxOPC::sendFirmwareConfigPacket() {
-    string b = "000000001111111100000000000001010000000000000001000000000000001000000010";
-    client.sendRaw(b);
+
+    char firmwareConfig = char(0x02);
+    
+    char packet [9];
+    packet[0] = char(0x00); // Channel (reserved)
+    packet[1] = char(0xFF); // Command (System Exclusive)
+    packet[2] = char(0x00); // Length high byte
+    packet[3] = char(0x05); // Length low byte
+    packet[4] = char(0x00); // System ID high byte
+    packet[5] = char(0x01); // System ID low byte
+    packet[6] = char(0x00); // Command ID high byte
+    packet[7] = char(0x02);
+    packet[8] = char(firmwareConfig);
+    
+    client.sendRawBytes(packet, 9);
 }
