@@ -53,7 +53,7 @@ class ofxOPC
 			@param int numberOfFadecandys : how many devices are attached to the server
 		*/
 		//--------------------------------------------------------------
-		void setup(string address,int port,int _numberOfFadecandys = 1);
+		void setup(string address,int port,int _numberOfFadecandys = 1, int numLedsPerStrip = 64);
 	
 		//--------------------------------------------------------------
 		/// \brief Setup without the Fadecandy
@@ -208,6 +208,7 @@ class ofxOPC
         vector <string> error;
         int _port;
         int _w,_h;
+        int ledsPerStrip;
 
     private:
         ofTrueTypeFont labels;

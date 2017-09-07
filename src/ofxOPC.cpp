@@ -6,9 +6,10 @@
 //
 #include "ofxOPC.h"
 //--------------------------------------------------------------
-void ofxOPC::setup(string address, int port,int _numberOfFadecandys)
+void ofxOPC::setup(string address, int port,int _numberOfFadecandys, int numLedsPerStrip)
 {
 	numberOfFadecandys = _numberOfFadecandys;
+    ledsPerStrip = numLedsPerStrip;
 	bSetupWithFadecandy = false;
     // Copy the Address and port to the variables
     _port = port;
