@@ -480,7 +480,7 @@ void ofxOPC::disconnect()
 //--------------------------------------------------------------
 void ofxOPC::sendFirmwareConfigPacket() {
 
-    char firmwareConfig = char(0x02);
+    char firmwareConfig = char(0x02); // Hard coded to set interpolation off
     
     char packet [9];
     packet[0] = char(0x00); // Channel (reserved)
