@@ -208,11 +208,12 @@ class ofxOPC
         vector <string> error;
         int _port;
         int _w,_h;
-        int ledsPerStrip;
+    
 
     private:
         ofTrueTypeFont labels;
 		int numberOfFadecandys;
+        int ledsPerStrip;
         void connect();
         void disconnect();
         ofFbo screenCapture;

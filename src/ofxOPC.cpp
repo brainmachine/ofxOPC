@@ -307,7 +307,7 @@ void ofxOPC::writeChannel(uint8_t channel, vector<ofColor>pix)
     }
 
     uint16_t channel_offset = (channel - 1) * ledsPerStrip;
-    // If there is more than [ledsPerStrip] pixels per channel limit the amount to 60
+    // If there is more than [ledsPerStrip] pixels per channel limit the amount to that number
     if (pix.size() > ledsPerStrip)
 	{
         ofLogError() << "Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to "+ofToString(ledsPerStrip)+" pixels";
