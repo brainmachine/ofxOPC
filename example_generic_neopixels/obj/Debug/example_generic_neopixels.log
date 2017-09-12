@@ -1,0 +1,9 @@
+﻿  ofApp.cpp
+C:\Users\DellXPS\Documents\of\of_v0.9.8_vs_release\addons\ofxOPC\src\ofxOPC.h(34): warning C4200: nonstandard extension used: zero-sized array in struct/union
+  C:\Users\DellXPS\Documents\of\of_v0.9.8_vs_release\addons\ofxOPC\src\ofxOPC.h(34): note: This member will be ignored by a defaulted constructor or copy/move assignment operator
+C:\Users\DellXPS\Documents\of\of_v0.9.8_vs_release\addons\ofxOPC\src\ofxOPC.h(40): warning C4200: nonstandard extension used: zero-sized array in struct/union
+  C:\Users\DellXPS\Documents\of\of_v0.9.8_vs_release\addons\ofxOPC\src\ofxOPC.h(40): note: This member will be ignored by a defaulted constructor or copy/move assignment operator
+  example_generic_neopixels.vcxproj -> C:\Users\DellXPS\Documents\of\of_v0.9.8_vs_release\addons\ofxOPC\example_generic_neopixels\bin\example_generic_neopixels_debug.exe
+  example_generic_neopixels.vcxproj -> bin\example_generic_neopixels_debug.pdb (Full PDB)
+  
+  	                   9	C:\Users\DellXPS\Documents\of\of_v0.9.8_vs_release\export\vs\Win32\
