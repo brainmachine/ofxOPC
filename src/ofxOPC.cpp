@@ -16,7 +16,7 @@ void ofxOPC::setup(string address, int port,int _numberOfFadecandys, int numLeds
     _address = address;
 
     // If this an example it will use this resource
-    labels.load( "../../../resources/Verdana.ttf", 13);
+    //labels.load( "../../../resources/Verdana.ttf", 13); // throwing errors
 
     // If not it will searching the data directory for the resource5
     if (!labels.isLoaded()) {
@@ -481,7 +481,7 @@ void ofxOPC::disconnect()
 //--------------------------------------------------------------
 void ofxOPC::sendFirmwareConfigPacket() {
 
-    char firmwareConfig = char(0x02); // Hard coded to set interpolation off
+    //char firmwareConfig = char(0x02); // Hard coded to set interpolation off
     
     char packet [9];
     packet[0] = char(0x00); // Channel (reserved)
@@ -495,4 +495,28 @@ void ofxOPC::sendFirmwareConfigPacket() {
     packet[8] = char(firmwareConfig);
     
     client.sendRawBytes(packet, 9);
+}
+
+void ofxOPC::setDithering(bool enabled)
+{
+	if (enabled)
+		firmwareConfig &= ~0x01;
+	else
+		firmwareConfig |= 0x01;
+	sendFirmwareConfigPacket();
+}
+
+void ofxOPC::setInterpolation(bool enabled)
+{
+	if (enabled)
+		firmwareConfig &= ~0x02;
+	else
+		firmwareConfig |= 0x02;
+	sendFirmwareConfigPacket();
+}
+
+void ofxOPC::setStatusLed(bool on)
+{
+	firmwareConfig &= 0x0C;
+	sendFirmwareConfigPacket();
 }
