@@ -166,7 +166,22 @@ class ofxOPC
         void tryConnecting();
 	
         void retryConnecting();
-        void sendFirmwareConfigPacket(); // Not used
+		
+		// Send a packet with the current firmware configuration settings
+		void sendFirmwareConfigPacket(); 
+
+		// Enable or disable dithering. Dithering avoids the "stair-stepping" artifact and increases color
+		// resolution by quickly jittering between adjacent 8-bit brightness levels about 400 times a second.
+		// Dithering is on by default.
+		void setDithering(bool enabled);
+
+		// Enable or disable frame interpolation. Interpolation automatically blends between consecutive frames
+		// in hardware, and it does so with 16-bit per channel resolution. Combined with dithering, this helps make
+		// fades very smooth. Interpolation is on by default.
+		void setInterpolation(bool enabled);
+
+		// Manually turn the Fadecandy onboard LED on or off. This disables automatic LED control.
+		void setStatusLed(bool on);
 	
 		//--------------------------------------------------------------
 		/// \brief Splits the color data into automatically
@@ -222,6 +237,9 @@ class ofxOPC
         unsigned char * screenPixels;
 	
 		bool bSetupWithFadecandy;
+
+		//used to configure firmware options
+		char firmwareConfig;
     
         // For sending our data packets out to the Server
         ofxTCPClient client;

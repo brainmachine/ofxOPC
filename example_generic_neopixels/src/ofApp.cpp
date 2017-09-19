@@ -8,7 +8,7 @@ void ofApp::setup()
     hide = false;
     
     // Connect to the fcserver
-    opcClient.setup("127.0.0.1", 7890);
+    opcClient.setup("192.168.0.211", 7890);
     
     // You define the stage size and draw into the stage
     opcClient.setupStage(500, 500);
