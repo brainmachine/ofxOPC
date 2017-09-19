@@ -267,7 +267,7 @@ void ofxOPC::autoWriteData(vector<ofColor>pix)
 		return;
 	}
 	
-	// If there is more than [ledsPerStrip] pixels per channel limit the amount to 60
+	// If there is more than [ledsPerStrip] pixels per channel limit the amount to [ledsPerStrip]
 	if (pix.size() > ledsPerStrip)
 	{
 		int a = (int)(ofGetElapsedTimef()*100);
