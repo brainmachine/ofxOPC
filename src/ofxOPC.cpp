@@ -6,16 +6,17 @@
 //
 #include "ofxOPC.h"
 //--------------------------------------------------------------
-void ofxOPC::setup(string address, int port,int _numberOfFadecandys)
+void ofxOPC::setup(string address, int port,int _numberOfFadecandys, int numLedsPerStrip)
 {
 	numberOfFadecandys = _numberOfFadecandys;
+    ledsPerStrip = numLedsPerStrip;
 	bSetupWithFadecandy = false;
     // Copy the Address and port to the variables
     _port = port;
     _address = address;
 
     // If this an example it will use this resource
-    labels.load( "../../../resources/Verdana.ttf", 13);
+    //labels.load( "../../../resources/Verdana.ttf", 13); // throwing errors
 
     // If not it will searching the data directory for the resource5
     if (!labels.isLoaded()) {
@@ -31,7 +32,7 @@ void ofxOPC::setup(string address, int port,int _numberOfFadecandys)
     connect();
     
     // Determine the length of the data section, as a multiple of the SPCData type
-    uint16_t data_length = (numberOfFadecandys * 8) * 64 * sizeof(OPCPacket_SPCData_t);
+    uint16_t data_length = (numberOfFadecandys * 8) * ledsPerStrip * sizeof(OPCPacket_SPCData_t);
     
     // Add the header-section's length to the data-section's to determine the total packet length; allocate the packet
     OPC_SPC_packet_length = sizeof(OPCPacket_Header_t) + data_length;
@@ -266,18 +267,18 @@ void ofxOPC::autoWriteData(vector<ofColor>pix)
 		return;
 	}
 	
-	// If there is more than 64 pixels per channel limit the amount to 60
-	if (pix.size() > 64)
+	// If there is more than [ledsPerStrip] pixels per channel limit the amount to 60
+	if (pix.size() > ledsPerStrip)
 	{
 		int a = (int)(ofGetElapsedTimef()*100);
-		int channelsToWriteTo = pix.size() / 64;
+		int channelsToWriteTo = pix.size() / ledsPerStrip;
 		if(a % 500 == 0) ofLogNotice() << "Auto Splitting " << channelsToWriteTo;
 		
 		for (int c = 1; c < channelsToWriteTo; c++)
 		{
 			uint8_t channel = c;
-			uint16_t channel_offset = (channel - 1) * 64;
-			for (unsigned int i = 0; i < 64; i++)
+			uint16_t channel_offset = (channel - 1) * ledsPerStrip;
+			for (unsigned int i = 0; i < ledsPerStrip; i++)
 			{
 				OPC_SPC_packet_data[channel_offset + i].r = pix[channel_offset+i].r;
 				OPC_SPC_packet_data[channel_offset + i].g = pix[channel_offset+i].g;
@@ -305,13 +306,13 @@ void ofxOPC::writeChannel(uint8_t channel, vector<ofColor>pix)
         return;
     }
 
-    uint16_t channel_offset = (channel - 1) * 64;
-    // If there is more than 64 pixels per channel limit the amount to 60
-    if (pix.size() > 64)
+    uint16_t channel_offset = (channel - 1) * ledsPerStrip;
+    // If there is more than [ledsPerStrip] pixels per channel limit the amount to that number
+    if (pix.size() > ledsPerStrip)
 	{
-        ofLogError() << "Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to 64 pixels";
-        error.push_back("Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to 64 pixels");
-        for (unsigned int i = 0; i < 64; i++)
+        ofLogError() << "Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to "+ofToString(ledsPerStrip)+" pixels";
+        error.push_back("Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to "+ofToString(ledsPerStrip)+" pixels");
+        for (unsigned int i = 0; i < ledsPerStrip; i++)
 		{
             OPC_SPC_packet_data[channel_offset + i].r = pix[i].r;
             OPC_SPC_packet_data[channel_offset + i].g = pix[i].g;
@@ -348,14 +349,14 @@ void ofxOPC::writeChannel(uint8_t channel, vector <ofColor> pix1,vector <ofColor
 		return;
 	}
 	
-    uint16_t channel_offset = (channel - 1) * 64;
+    uint16_t channel_offset = (channel - 1) * ledsPerStrip;
 
-    // If there is more than 64 pixels per channel limit the amount to 60
-    if (pix1.size() > 64)
+    // If there is more than [ledsPerStrip] pixels per channel limit the amount to 60
+    if (pix1.size() > ledsPerStrip)
 	{
-        ofLogError() << "Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to 64 pixels";
-        error.push_back("Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to 64 pixels");
-        for (unsigned int i = 0; i < 64; i++)
+        ofLogError() << "Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to "+ofToString(ledsPerStrip)+" pixels";
+        error.push_back("Too Much Data on Channel: "+ofToString(unsigned(channel))+" Limiting to "+ofToString(ledsPerStrip) + " pixels");
+        for (unsigned int i = 0; i < ledsPerStrip; i++)
 		{
             OPC_SPC_packet_data[channel_offset + i].r = pix1[i].r;
             OPC_SPC_packet_data[channel_offset + i].g = pix1[i].g;
@@ -445,7 +446,7 @@ void ofxOPC::tryConnecting()
             }
             else
             {
-                
+				ofLog(OF_LOG_NOTICE, "Could not connect to " + ofToString(_address));
             }
         }
     }
@@ -480,7 +481,7 @@ void ofxOPC::disconnect()
 //--------------------------------------------------------------
 void ofxOPC::sendFirmwareConfigPacket() {
 
-    char firmwareConfig = char(0x02); // Hard coded to set interpolation off
+    //char firmwareConfig = char(0x02); // Hard coded to set interpolation off
     
     char packet [9];
     packet[0] = char(0x00); // Channel (reserved)
@@ -494,4 +495,28 @@ void ofxOPC::sendFirmwareConfigPacket() {
     packet[8] = char(firmwareConfig);
     
     client.sendRawBytes(packet, 9);
+}
+
+void ofxOPC::setDithering(bool enabled)
+{
+	if (enabled)
+		firmwareConfig &= ~0x01;
+	else
+		firmwareConfig |= 0x01;
+	sendFirmwareConfigPacket();
+}
+
+void ofxOPC::setInterpolation(bool enabled)
+{
+	if (enabled)
+		firmwareConfig &= ~0x02;
+	else
+		firmwareConfig |= 0x02;
+	sendFirmwareConfigPacket();
+}
+
+void ofxOPC::setStatusLed(bool on)
+{
+	firmwareConfig &= 0x0C;
+	sendFirmwareConfigPacket();
 }

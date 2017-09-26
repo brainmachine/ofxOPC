@@ -6,10 +6,12 @@
 //  Created by David Haylock on 25/05/2014.
 //
 
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <iostream>
 #include "ofMain.h"
 #include "ofxNeoPixelObject.h"
-#include <math.h>
+
 //-------------------------------------------------------------------------------
 class ofxNeoPixelRing : public ofxNeoPixelObject{
     public:
