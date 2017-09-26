@@ -446,7 +446,7 @@ void ofxOPC::tryConnecting()
             }
             else
             {
-                
+				ofLog(OF_LOG_NOTICE, "Could not connect to " + ofToString(_address));
             }
         }
     }
