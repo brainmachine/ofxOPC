@@ -53,7 +53,7 @@ class ofxOPC
 			@param int numberOfFadecandys : how many devices are attached to the server
 		*/
 		//--------------------------------------------------------------
-		void setup(string address,int port,int _numberOfFadecandys = 1, int numLedsPerStrip = 64);
+		void setup(string address,int port,int _numberOfFadecandys = 1);
 	
 		//--------------------------------------------------------------
 		/// \brief Setup without the Fadecandy
@@ -182,6 +182,9 @@ class ofxOPC
 
 		// Manually turn the Fadecandy onboard LED on or off. This disables automatic LED control.
 		void setStatusLed(bool on);
+    
+        // Set number of LEDs per strip
+        void setLedsPerStrip(int num);
 	
 		//--------------------------------------------------------------
 		/// \brief Splits the color data into automatically

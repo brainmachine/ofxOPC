@@ -6,10 +6,10 @@
 //
 #include "ofxOPC.h"
 //--------------------------------------------------------------
-void ofxOPC::setup(string address, int port,int _numberOfFadecandys, int numLedsPerStrip)
+void ofxOPC::setup(string address, int port,int _numberOfFadecandys)
 {
 	numberOfFadecandys = _numberOfFadecandys;
-    ledsPerStrip = numLedsPerStrip;
+    ledsPerStrip = 64;
 	bSetupWithFadecandy = false;
     // Copy the Address and port to the variables
     _port = port;
@@ -519,4 +519,8 @@ void ofxOPC::setStatusLed(bool on)
 {
 	firmwareConfig &= 0x0C;
 	sendFirmwareConfigPacket();
+}
+
+void ofxOPC::setLedsPerStrip(int num) {
+    ledsPerStrip = num;
 }
