@@ -287,6 +287,10 @@ void ofxOPC::autoWriteData(vector<ofColor>pix)
 			client.sendRawBytes((char *)(OPC_SPC_packet), OPC_SPC_packet_length);
 		}
 	}
+    // We only have one channel...
+    else {
+        writeChannelOne(pix);
+    }
 }
 
 //--------------------------------------------------------------
